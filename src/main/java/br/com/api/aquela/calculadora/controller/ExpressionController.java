@@ -13,15 +13,24 @@ import org.springframework.web.bind.annotation.*;
 public class ExpressionController {
     @Autowired
     private ExpressionService expressionService;
+    @GetMapping(value = "/oi")
+    public String olah(){
+        return "Olá!";
+    }
     @PostMapping
     public ResponseEntity<Expression> save(@RequestBody Expression expression){
         expressionService.save(expression);
         return new ResponseEntity<Expression>(expression, HttpStatus.CREATED);
     }
-
-    @GetMapping(value = "/oi")
-    public String olah(){
-        return "Olá!";
+    @DeleteMapping
+    @ResponseBody
+    public ResponseEntity<String> delete(@RequestParam Long id){
+        expressionService.deleteById(id);
+        return new ResponseEntity<String>("Expressão id: "+ id +", deletada com sucesso!",HttpStatus.OK);
     }
-
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<Expression> getExpressionById(@RequestParam Long id){
+        Expression expression = expressionService.getExpressionById(id);
+        return new ResponseEntity<Expression>(expression, HttpStatus.OK);
+    }
 }
