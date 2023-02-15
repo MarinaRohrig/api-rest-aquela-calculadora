@@ -1,12 +1,14 @@
 package br.com.api.aquela.calculadora.controller;
 
 import br.com.api.aquela.calculadora.model.Expression;
-import br.com.api.aquela.calculadora.repository.ExpressionRepository;
 import br.com.api.aquela.calculadora.service.ExpressionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
 
 @RestController
 @RequestMapping(value = "/api")
@@ -30,7 +32,24 @@ public class ExpressionController {
     }
     @GetMapping(value = "/{id}")
     public ResponseEntity<Expression> getExpressionById(@RequestParam Long id){
-        Expression expression = expressionService.getExpressionById(id);
-        return new ResponseEntity<Expression>(expression, HttpStatus.OK);
+        return new ResponseEntity<Expression>(expressionService.getExpressionById(id), HttpStatus.OK);
     }
+
+    @GetMapping(value = "/expressions")
+    @ResponseBody
+    public ResponseEntity<List<Expression>> getExpressions(){
+        List<Expression> expressions = expressionService.getExpressions();
+        return new ResponseEntity<List<Expression>>(expressions,HttpStatus.OK);
+    }
+    @GetMapping(value = "/byText/{expressao}")
+    public ResponseEntity<Expression> getExpressionByText(@RequestParam (name = "expression") String expression){
+        return new ResponseEntity<Expression>(expressionService.getExpressionByText(expression),HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/testeCalc")
+    public String getCalc(){
+
+        return "Resultado: ";
+    }
+
 }

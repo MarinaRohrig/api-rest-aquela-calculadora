@@ -26,4 +26,15 @@ public class ExpressionService {
     public List<Expression> getExpressions(){
         return (List<Expression>) expressionRepository.findAll();
     }
+
+    public Expression getExpressionByText(String expression){
+        Expression expressionReturned = expressionRepository.getExpressionByText(expression);
+        return expressionReturned;
+    }
+
+    public String calcResult(Expression expression){
+        Double result = 0.0;
+        return "O resultado da expressão: "+ expression.getExpression() + "é: "+ result;
+    }
+
 }
