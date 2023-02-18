@@ -15,10 +15,6 @@ import java.util.List;
 public class ExpressionController {
     @Autowired
     private ExpressionService expressionService;
-    @GetMapping(value = "/oi")
-    public String olah(){
-        return "Olá!";
-    }
     @PostMapping
     public ResponseEntity<Expression> save(@RequestBody Expression expression){
         expressionService.save(expression);
