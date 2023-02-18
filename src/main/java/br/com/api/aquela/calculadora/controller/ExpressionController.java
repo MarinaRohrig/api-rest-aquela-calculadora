@@ -41,7 +41,6 @@ public class ExpressionController {
     public ResponseEntity<Expression> getExpressionByText(@RequestParam (name = "expression") String expression){
         return new ResponseEntity<Expression>(expressionService.getExpressionByText(expression),HttpStatus.OK);
     }
-
     @GetMapping(value = "/testeCalc")
     public String getCalc(){
 
