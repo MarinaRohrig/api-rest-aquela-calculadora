@@ -30,7 +30,6 @@ public class ExpressionController {
     public ResponseEntity<Expression> getExpressionById(@RequestParam Long id){
         return new ResponseEntity<Expression>(expressionService.getExpressionById(id), HttpStatus.OK);
     }
-
     @GetMapping(value = "/expressions")
     @ResponseBody
     public ResponseEntity<List<Expression>> getExpressions(){
@@ -42,9 +41,8 @@ public class ExpressionController {
         return new ResponseEntity<Expression>(expressionService.getExpressionByText(expression),HttpStatus.OK);
     }
     @GetMapping(value = "/testeCalc")
-    public String getCalc(){
-
-        return "Resultado: ";
+    public String getCalc(@RequestBody Expression expression){
+        return "Resultado: "+expressionService.calcResult(expression);
     }
 
 }

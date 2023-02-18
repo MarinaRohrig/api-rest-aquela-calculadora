@@ -20,10 +20,12 @@ public class Expression implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Expression that = (Expression) o;
-        return id.equals(that.id);
+        if (o instanceof Expression){
+            Expression that = (Expression) o;
+            return this.getExpression().equals(that.getExpression());
+        }else{
+            return false;
+        }
     }
 
     @Override
