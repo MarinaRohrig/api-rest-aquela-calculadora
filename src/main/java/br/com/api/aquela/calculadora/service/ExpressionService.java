@@ -6,6 +6,9 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,13 +18,15 @@ public class ExpressionService {
     private ExpressionRepository expressionRepository;
     ArrayList<String> operadores = new ArrayList<>();
     ArrayList<String> valores = new ArrayList<>();
+
     @Transactional
     public Expression save(Expression expression){
         if (expression.equals(getExpressionByText(expression.getExpression()))){
-            System.out.println("Já existe no banco");
             return getExpressionByText(expression.getExpression());
         }
         expression.setResult(calcResult(expression));
+        operadores.clear();
+        valores.clear();
         return expressionRepository.save(expression);
     }
     @Transactional
@@ -36,14 +41,15 @@ public class ExpressionService {
     }
 
     public Expression getExpressionByText(String expression){
-        Expression expressionReturned = expressionRepository.getExpressionByText(expression);
-        return expressionReturned;
+        return expressionRepository.getExpressionByText(expression);
     }
 
     public Double calcResult(Expression expression){
         Double result = 0.0;
-                stringToArrayList(expression.getExpression());
-         result = calculaRecursivo(operadores,valores);
+        DecimalFormat df = new DecimalFormat("###.##");
+        stringToArrayList(expression.getExpression());
+        result = calculaRecursivo(operadores,valores);
+        System.out.println(df.format(result));
         return result;
     }
     public void stringToArrayList(String expression){
@@ -53,6 +59,7 @@ public class ExpressionService {
                     || expressaoEmChar[i] == '/' || expressaoEmChar[i] == '*'){
                 operadores.add(String.valueOf(expressaoEmChar[i]));
             }else if ((i < expressaoEmChar.length-1) && (expressaoEmChar[i+1] == '.')){
+               // verificar como validar se o próximo é um operador para pegar mais de 1 número após a vírgula
                 valores.add(expressaoEmChar[i] +String.valueOf(expressaoEmChar[i+1])+ expressaoEmChar[i + 2]);
                 i+=2;
             } else{
@@ -71,6 +78,8 @@ public class ExpressionService {
                     if (Double.parseDouble(valores.get(i+1)) == 0){
                         result = 0.0;
                     } else {
+                        System.out.println(valores.get(i));
+                        System.out.println(Double.parseDouble(valores.get(i)));
                         result = Double.parseDouble(valores.get(i)) / Double.parseDouble(valores.get(i + 1));
                     }
                     i = operadores.size();

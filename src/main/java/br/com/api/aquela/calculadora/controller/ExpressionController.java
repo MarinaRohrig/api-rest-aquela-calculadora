@@ -15,10 +15,10 @@ import java.util.List;
 public class ExpressionController {
     @Autowired
     private ExpressionService expressionService;
-    @PostMapping
-    public ResponseEntity<Expression> save(@RequestBody Expression expression){
-        expressionService.save(expression);
-        return new ResponseEntity<Expression>(expression, HttpStatus.CREATED);
+    @PostMapping(produces = "application/json")
+    public ResponseEntity<String> save(@RequestBody Expression expression){
+       expression = expressionService.save(expression);
+        return new ResponseEntity<String>("resultado: "+expression.getResult(), HttpStatus.OK);
     }
     @DeleteMapping
     @ResponseBody
