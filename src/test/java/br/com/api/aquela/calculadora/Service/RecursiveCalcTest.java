@@ -1,4 +1,4 @@
-package br.com.api.aquela.calculadora.controller;
+package br.com.api.aquela.calculadora.Service;
 
 import br.com.api.aquela.calculadora.model.Expression;
 import br.com.api.aquela.calculadora.service.ExpressionService;
@@ -10,7 +10,7 @@ import org.springframework.test.context.ContextConfiguration;
 
 @SpringBootTest
 @ContextConfiguration
-public class CalculadoraTest extends TestCase {
+public class RecursiveCalcTest extends TestCase {
     @Autowired
     ExpressionService expressionService = new ExpressionService();
 
@@ -21,7 +21,22 @@ public class CalculadoraTest extends TestCase {
         String expectedReturn = "4";
         expression.setExpression("2+2");
         returnedString = expressionService.calcResult(expression);
-        System.out.println(returnedString);
         assertEquals(expectedReturn,returnedString);
+
+        expectedReturn="10,29";
+        expression.setExpression("2.3*2.3+5");
+        returnedString = expressionService.calcResult(expression);
+        assertEquals(expectedReturn,returnedString);
+
+        expectedReturn="0,78";
+        expression.setExpression("2.33/3");
+        returnedString = expressionService.calcResult(expression);
+        assertEquals(expectedReturn,returnedString);
+
+        expectedReturn="0";
+        expression.setExpression("1/0");
+        returnedString = expressionService.calcResult(expression);
+        assertEquals(expectedReturn,returnedString);
+
     }
 }
