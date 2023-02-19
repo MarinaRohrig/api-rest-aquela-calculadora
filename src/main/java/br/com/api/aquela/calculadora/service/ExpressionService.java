@@ -14,8 +14,8 @@ import java.util.List;
 public class ExpressionService {
     @Autowired
     private ExpressionRepository expressionRepository;
-    ArrayList<String> operadores = new ArrayList<>();
-    ArrayList<String> valores = new ArrayList<>();
+    static ArrayList<String> operadores = new ArrayList<>();
+    static ArrayList<String> valores = new ArrayList<>();
 
     @Transactional
     public Expression save(Expression expression){
@@ -47,6 +47,7 @@ public class ExpressionService {
         DecimalFormat df = new DecimalFormat("###.##");
         stringToArrayList(expression.getExpression());
         result = df.format(calculaRecursivo(operadores,valores));
+        valores.clear();
         return result;
     }
     public void stringToArrayList(String expression){
