@@ -55,15 +55,19 @@ public class ExpressionService {
     public void stringToArrayList(String expression){
         char[] expressaoEmChar = expression.toCharArray();
         for(int i = 0; i < expressaoEmChar.length; i++){
-            if (expressaoEmChar[i] == '+' || expressaoEmChar[i] == '-'
-                    || expressaoEmChar[i] == '/' || expressaoEmChar[i] == '*'){
+            String string ="";
+            do {
+                string += String.valueOf(expressaoEmChar[i]);
+                if(i < expressaoEmChar.length-1) {
+                    i++;
+                }else{
+                    break;
+                }
+            }while (!(expressaoEmChar[i] == '+' || expressaoEmChar[i] == '-'
+                    || expressaoEmChar[i] == '/' || expressaoEmChar[i] == '*'));
+            valores.add(string);
+            if(i < expressaoEmChar.length-1) {
                 operadores.add(String.valueOf(expressaoEmChar[i]));
-            }else if ((i < expressaoEmChar.length-1) && (expressaoEmChar[i+1] == '.')){
-               // verificar como validar se o próximo é um operador para pegar mais de 1 número após a vírgula
-                valores.add(expressaoEmChar[i] +String.valueOf(expressaoEmChar[i+1])+ expressaoEmChar[i + 2]);
-                i+=2;
-            } else{
-                valores.add(String.valueOf(expressaoEmChar[i]));
             }
         }
     }
