@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 
+
 @RestController
 @RequestMapping(value = "/api")
 public class ExpressionController {
@@ -17,8 +18,9 @@ public class ExpressionController {
     private ExpressionService expressionService;
     @PostMapping(produces = "application/json")
     public ResponseEntity<String> save(@RequestBody Expression expression){
+
        expression = expressionService.save(expression);
-        return new ResponseEntity<String>("resultado: "+expression.getResult(), HttpStatus.OK);
+       return new ResponseEntity<String>("{\n\"resultado\": "+expression.getResult()+"\n}", HttpStatus.OK);
     }
     @DeleteMapping
     @ResponseBody
