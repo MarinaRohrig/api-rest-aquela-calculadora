@@ -18,7 +18,9 @@ public class ExpressionController {
     private ExpressionService expressionService;
     @PostMapping(produces = "application/json")
     public ResponseEntity<String> save(@RequestBody Expression expression){
-
+        if (expression.getExpression().contains("/0")){
+            return new ResponseEntity<String>(HttpStatus.CONFLICT);
+        }
        expression = expressionService.save(expression);
        return new ResponseEntity<String>("{\n\"resultado\": "+expression.getResult()+"\n}", HttpStatus.OK);
     }
@@ -42,9 +44,4 @@ public class ExpressionController {
     public ResponseEntity<Expression> getExpressionByText(@RequestParam (name = "expression") String expression){
         return new ResponseEntity<Expression>(expressionService.getExpressionByText(expression),HttpStatus.OK);
     }
-    @GetMapping(value = "/testeCalc")
-    public String getCalc(@RequestBody Expression expression){
-        return "Resultado: "+expressionService.calcResult(expression);
-    }
-
 }
