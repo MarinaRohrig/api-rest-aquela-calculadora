@@ -6,8 +6,6 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +23,6 @@ public class ExpressionService {
             return getExpressionByText(expression.getExpression());
         }
         expression.setResult(calcResult(expression).replace(",","."));
-        System.out.println(expression.getResult());
         operadores.clear();
         valores.clear();
         return expressionRepository.save(expression);
@@ -50,7 +47,6 @@ public class ExpressionService {
         DecimalFormat df = new DecimalFormat("###.##");
         stringToArrayList(expression.getExpression());
         result = df.format(calculaRecursivo(operadores,valores));
-        System.out.println(result);
         return result;
     }
     public void stringToArrayList(String expression){
@@ -73,40 +69,38 @@ public class ExpressionService {
         }
     }
 
-    public Double calculaRecursivo(ArrayList<String> operadores, ArrayList<String> valores) {
+    public Double calculaRecursivo(ArrayList<String> operators, ArrayList<String> values) {
         Double result = 0.0;
         int j = 0;
-        for (int i = 0; i < operadores.size(); i++) {
-            if (operadores.get(i).equals("/") || operadores.get(i).equals("*")) {
+        for (int i = 0; i < operators.size(); i++) {
+            if (operators.get(i).equals("/") || operators.get(i).equals("*")) {
                 j = i;
-                if (operadores.get(i).equals("/")) {
-                    if (Double.parseDouble(valores.get(i+1)) == 0){
+                if (operators.get(i).equals("/")) {
+                    if (Double.parseDouble(values.get(i+1)) == 0){
                         result = 0.0;
                     } else {
-                        System.out.println(valores.get(i));
-                        System.out.println(Double.parseDouble(valores.get(i)));
-                        result = Double.parseDouble(valores.get(i)) / Double.parseDouble(valores.get(i + 1));
+                        result = Double.parseDouble(values.get(i)) / Double.parseDouble(values.get(i + 1));
                     }
-                    i = operadores.size();
-                } else if (operadores.get(i).equals("*")) {
-                    result = Double.parseDouble(valores.get(i)) * Double.parseDouble(valores.get(i + 1));
-                    i = operadores.size();
+                    i = operators.size();
+                } else if (operators.get(i).equals("*")) {
+                    result = Double.parseDouble(values.get(i)) * Double.parseDouble(values.get(i + 1));
+                    i = operators.size();
                 }
             }
         }
-        if (operadores.get(j).equals("+")) {
-            result = Double.parseDouble(valores.get(j)) + Double.parseDouble(valores.get(j + 1));
-        } else if (operadores.get(j).equals("-")) {
-            result = Double.parseDouble(valores.get(j)) - Double.parseDouble(valores.get(j + 1));
+        if (operators.get(j).equals("+")) {
+            result = Double.parseDouble(values.get(j)) + Double.parseDouble(values.get(j + 1));
+        } else if (operators.get(j).equals("-")) {
+            result = Double.parseDouble(values.get(j)) - Double.parseDouble(values.get(j + 1));
         }
-        operadores.remove(j);
-        valores.add(j, String.valueOf(result));
-        valores.remove(j+1);
-        valores.remove(j+1);
+        operators.remove(j);
+        values.add(j, String.valueOf(result));
+        values.remove(j+1);
+        values.remove(j+1);
 
-        if (operadores.size() == 0){
-            return Double.parseDouble(valores.get(0));
+        if (operators.size() == 0){
+            return Double.parseDouble(values.get(0));
         }
-        return calculaRecursivo(operadores, valores);
+        return calculaRecursivo(operators, values);
     }
 }
