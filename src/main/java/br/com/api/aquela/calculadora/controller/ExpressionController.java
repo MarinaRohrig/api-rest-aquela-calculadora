@@ -15,10 +15,10 @@ import java.util.List;
 public class ExpressionController {
     @Autowired
     private ExpressionService expressionService;
-    @PostMapping
-    public ResponseEntity<Expression> save(@RequestBody Expression expression){
-        expressionService.save(expression);
-        return new ResponseEntity<Expression>(expression, HttpStatus.CREATED);
+    @PostMapping(produces = "application/json")
+    public ResponseEntity<String> save(@RequestBody Expression expression){
+       expression = expressionService.save(expression);
+        return new ResponseEntity<String>("resultado: "+expression.getResult(), HttpStatus.OK);
     }
     @DeleteMapping
     @ResponseBody
@@ -30,7 +30,6 @@ public class ExpressionController {
     public ResponseEntity<Expression> getExpressionById(@RequestParam Long id){
         return new ResponseEntity<Expression>(expressionService.getExpressionById(id), HttpStatus.OK);
     }
-
     @GetMapping(value = "/expressions")
     @ResponseBody
     public ResponseEntity<List<Expression>> getExpressions(){
@@ -41,11 +40,9 @@ public class ExpressionController {
     public ResponseEntity<Expression> getExpressionByText(@RequestParam (name = "expression") String expression){
         return new ResponseEntity<Expression>(expressionService.getExpressionByText(expression),HttpStatus.OK);
     }
-
     @GetMapping(value = "/testeCalc")
-    public String getCalc(){
-
-        return "Resultado: ";
+    public String getCalc(@RequestBody Expression expression){
+        return "Resultado: "+expressionService.calcResult(expression);
     }
 
 }
