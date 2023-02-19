@@ -24,7 +24,8 @@ public class ExpressionService {
         if (expression.equals(getExpressionByText(expression.getExpression()))){
             return getExpressionByText(expression.getExpression());
         }
-        expression.setResult(calcResult(expression));
+        expression.setResult(calcResult(expression).replace(",","."));
+        System.out.println(expression.getResult());
         operadores.clear();
         valores.clear();
         return expressionRepository.save(expression);
@@ -44,12 +45,12 @@ public class ExpressionService {
         return expressionRepository.getExpressionByText(expression);
     }
 
-    public Double calcResult(Expression expression){
-        Double result = 0.0;
+    public String calcResult(Expression expression){
+        String result = "";
         DecimalFormat df = new DecimalFormat("###.##");
         stringToArrayList(expression.getExpression());
-        result = calculaRecursivo(operadores,valores);
-        System.out.println(df.format(result));
+        result = df.format(calculaRecursivo(operadores,valores));
+        System.out.println(result);
         return result;
     }
     public void stringToArrayList(String expression){
@@ -108,5 +109,4 @@ public class ExpressionService {
         }
         return calculaRecursivo(operadores, valores);
     }
-
 }

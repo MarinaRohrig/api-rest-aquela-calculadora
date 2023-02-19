@@ -16,7 +16,7 @@ public class Expression implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String expression;
-    private Double result;
+    private String result;
 
     @Override
     public boolean equals(Object o) {
