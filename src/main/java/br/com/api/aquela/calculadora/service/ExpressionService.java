@@ -17,6 +17,11 @@ public class ExpressionService {
     static ArrayList<String> operadores = new ArrayList<>();
     static ArrayList<String> valores = new ArrayList<>();
 
+    //TODO - Sempre é bom termos nomenclaturas de métodos o mais próximos possíveis de oque eles fazem.
+    // Aqui é um método que não só salva, mas também faz um get e compara, se caso achar, retorna..
+    // ou seja, ele se torna um metodo de find dentro do método de save..
+    // Partindo do conceito de SOLID, não é uma boa prática fazer essa forma.
+    // https://blog.casadodesenvolvedor.com.br/solid-na-pratica/#:~:text=SOLID%20%C3%A9%20um%20conjunto%20de,artigo%20The%20Principles%20of%20OOD.
     @Transactional
     public Expression save(Expression expression){
         if (expression.equals(getExpressionByText(expression.getExpression()))){
@@ -35,6 +40,7 @@ public class ExpressionService {
         return expressionRepository.findById(idExpression).get();
     }
     public List<Expression> getExpressions(){
+        // TODO - Precisa do cast?
         return (List<Expression>) expressionRepository.findAll();
     }
 
@@ -51,6 +57,8 @@ public class ExpressionService {
         return result;
     }
     public void stringToArrayList(String expression){
+        // TODO - Método dificil de entender
+        // Em caso de necessidade de manutenção, vai custar o dobro ou triplo do tempo de outro DEV.
         char[] expressaoEmChar = expression.toCharArray();
         for(int i = 0; i < expressaoEmChar.length; i++){
             String string ="";
@@ -73,6 +81,12 @@ public class ExpressionService {
     public Double calculaRecursivo(ArrayList<String> operators, ArrayList<String> values) {
         Double result = 0.0;
         int j = 0;
+        // TODO - Hoje em dia temos operações mais legíveis, práticos e performáticos para iterar sobre listas, como por exemplo
+        // for(String item: operators) { print(item) }
+        // OU, melhor ainda
+        // operators.forEach { item -> print(item)},
+
+        // TODO - Poderia evitar o loop completo toda vez fazendo um operators.contains() antes.
         for (int i = 0; i < operators.size(); i++) {
             if (operators.get(i).equals("/") || operators.get(i).equals("*")) {
                 j = i;
@@ -89,6 +103,16 @@ public class ExpressionService {
                 }
             }
         }
+        //TODO - Aqui dentro deveria estar a regra da divisão por 0, em caso de ter, lançar uma exceção capturada pelo controlador.
+
+        //TODO - Coisas que são usados várias vezes no código, deve ser colocadas numa constante.. ex:
+        // const DIVISION = "/"
+        // ao inves de usar "/" sempre, usar DIVISION
+
+
+        //TODO - Quando um método se torna pesado de ler, é sempre bom ter comentários explicando oque cada passo deve fazer
+        // mas o ideia é não ser pesado pra ler.
+
         if (operators.get(j).equals("+")) {
             result = Double.parseDouble(values.get(j)) + Double.parseDouble(values.get(j + 1));
         } else if (operators.get(j).equals("-")) {
@@ -99,6 +123,7 @@ public class ExpressionService {
         values.remove(j+1);
         values.remove(j+1);
 
+        // TODO - operators.isEmpty() é melhor
         if (operators.size() == 0){
             return Double.parseDouble(values.get(0));
         }

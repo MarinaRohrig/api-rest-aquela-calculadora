@@ -33,3 +33,7 @@ public class Expression implements Serializable {
         return Objects.hash(id);
     }
 }
+
+// TODO - Nomenclaturas de entidades são muito importantes p/ demonstrar o que elas armazenam e retornam
+// nesse caso aqui, uma tabela chamada Expression com uma coluna expression não é uma boa prática..
+// Eu colocaria Operation o nome da tabela.
